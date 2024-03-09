@@ -35,7 +35,6 @@ public class main
         	System.out.println("Yorum Satır Sayısı: " + comment);
         	System.out.println("LOC: " + LOC);
         	System.out.println("Fonksiyon Sayısı: " + functions);
-        	System.out.println("Javadoc Satır Sayısı: " + javadoc);
         	System.out.println("Yorum Sapma Yüzdesi: %" + deviation);
         	System.out.println("----------------------------");
         }

@@ -144,8 +144,8 @@ public class Analyser
                     isCommentBlock = false;
                     javadoc++;
                     continue;
-                }
-
+                } 
+                
             }
         } 
 		catch (IOException e) 
@@ -212,10 +212,19 @@ public class Analyser
 		float f_comment = comment;
 		float f_function = function;
 		float f_line = line;
-		float YG = ((javadoc + comment) * 0.8f) / function;
-		float YH = (line / function) * 0.3f;
+		float deviation = 0;
+		try
+		{
+			float YG = ((javadoc + comment) * 0.8f) / function;
+			float YH = (line / function) * 0.3f;
+			deviation = ((100 * YG) / YH - 100);
+		}
+		catch(ArithmeticException e)
+		{
+			
+		}
 		
-		return ((100 * YG) / YH - 100);
+		return deviation;
 	}
 	
 	public String getFileName(String file)

@@ -26,8 +26,6 @@ public class FileManager
         System.out.println(url);
 		return url;
 	}
-	
-	
 
 	public File downloadFile() 
 	{
