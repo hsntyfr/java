@@ -1,5 +1,7 @@
-package application;
+package project;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.File;
 import java.io.IOException;
 import java.io.*;
@@ -101,13 +103,36 @@ public class FileManager
                 {
                     findJavaFilesHelper(file, javaFilesList);
                 } 
-                else if (file.getName().endsWith(".java")) 
+                else if (file.getName().endsWith(".java") && !file.getName().startsWith("I")) 
                 {
+                	if(isJavaFile(file))
                     javaFilesList.add(file.getAbsolutePath());
                 }
             }
         }
     }
+	
+	private static boolean isJavaFile(File file)
+	{
+		Pattern pattern = Pattern.compile("(?<=\\bclass\\s)\\w+");
+		try {
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.find()) {
+                    return true;
+                }
+            }
+            scanner.close();
+        } 
+		catch (FileNotFoundException e) 
+		{
+            e.printStackTrace();
+        }
+		return false;	
+	}
+	
 }
 	
 

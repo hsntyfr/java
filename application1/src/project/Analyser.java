@@ -1,4 +1,4 @@
-package application;
+package project;
 import java.io.File;
 import java.util.regex.Matcher;
 import java.io.BufferedReader;
@@ -121,43 +121,40 @@ public class Analyser
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) 
 		{
             String line;
-            boolean isCommentBlock = false;
+            boolean inJavadoc = false;
 
-            while ((line = reader.readLine()) != null) 
+            while ((line = reader.readLine()) != null)
             {
                 line = line.trim();
-                
-                if (line.isEmpty())
-                {
-                    continue;
-                }
-
                 if (line.startsWith("/**")) 
                 {
-                    isCommentBlock = true;
-                    javadoc++;
-                    continue;
+                    inJavadoc = true;
                 }
-
-                if (line.endsWith("*/")) 
+                else if (line.startsWith("*/"))
                 {
-                    isCommentBlock = false;
-                    javadoc++;
-                    continue;
+                    inJavadoc = false;
                 } 
-                
+                else if (inJavadoc) 
+                {
+                	javadoc++;
+                	//System.out.print("\n"+line);
+                	/*if (isRealComment(line))
+                	{
+                        javadoc++;
+                        //System.out.print("\n"+line);
+                	}*/
+                }
             }
-        } 
-		catch (IOException e) 
-		{
+        } catch (IOException e) {
             e.printStackTrace();
         }
-		
-		return javadoc;
+
+        return javadoc;
 	}
 	public int findComment(String file)
 	{
 		int comment = 0;
+		Pattern pattern = Pattern.compile("^\\s*//.*");
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) 
 		{
             String line;
@@ -166,35 +163,41 @@ public class Analyser
             while ((line = reader.readLine()) != null) 
             {
                 line = line.trim();
+                //System.out.print("\n"+line);
+                Matcher matcher = pattern.matcher(line);
                 
                 if (line.isEmpty())
                 {
                     continue;
                 }
 
-                if (line.startsWith("//"))
-                {
+                if (line.contains("//"))
+                {                	
                     comment++;
+                	//System.out.println(line);
+
                     continue;
                 }
 
-                if (line.startsWith("/*")) 
+                if (line.startsWith("/*") && line.length() == 2)
                 {
+                	//System.out.println(line);
+                	//System.out.println(line.charAt(1));
                     isCommentBlock = true;
-                    comment++;
                     continue;
                 }
 
                 if (line.endsWith("*/")) 
                 {
                     isCommentBlock = false;
-                    comment++;
+
                     continue;
                 }
 
                 if (isCommentBlock) 
                 {
                     comment++;
+                    System.out.print("\n"+line);
                 }
             }
         } 
@@ -234,5 +237,10 @@ public class Analyser
         
         return fileName;
     }
+	private static boolean isRealComment(String line)
+	{
+		line = line.trim();
+	    return !(line.isEmpty() || line.equals("*"));
+	}
 }
 

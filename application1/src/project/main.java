@@ -1,9 +1,9 @@
-package application;
+package project;
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
 
-import application.FileManager;
+import project.FileManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +33,7 @@ public class main
         	float deviation = analyser.calculateDeviationOfComment(javadoc, comment, functions, pureCodeLine);
         	System.out.println("Javadoc Satır Sayısı: " + javadoc);
         	System.out.println("Yorum Satır Sayısı: " + comment);
+        	System.out.println("Kod Satır Sayısı: " + pureCodeLine);
         	System.out.println("LOC: " + LOC);
         	System.out.println("Fonksiyon Sayısı: " + functions);
         	System.out.println("Yorum Sapma Yüzdesi: %" + deviation);
