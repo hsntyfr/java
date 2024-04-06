@@ -5,9 +5,6 @@ import java.util.regex.Pattern;
 import java.io.File;
 import java.io.IOException;
 import java.io.*;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 public class FileManager 
@@ -25,7 +22,6 @@ public class FileManager
         	partsUrl[partsUrl.length - 2] = "";
         }
         url = String.join("/", partsUrl);
-        //System.out.println(url);
 		return url;
 	}
 
@@ -69,9 +65,10 @@ public class FileManager
                     if (filesa.isDirectory()) 
                     {
                         deleteFile(filesa);
-                    } else {
-                    	System.out.print(filesa.getName());
-                        System.out.print(filesa.delete() + "\n");
+                    } 
+                    else
+                    {
+                        filesa.delete();
                     }
                 }
             }
@@ -82,30 +79,8 @@ public class FileManager
 		{
             System.out.println("Belirtilen dizin bulunamadı.");
             return false;
-
         }
 	}
-	public static void klasorSil(String klasorYolu) {
-        File klasor = new File(klasorYolu);
-        if (klasor.isDirectory()) {
-            File[] dosyalar = klasor.listFiles();
-            if (dosyalar != null) {
-                for (File dosya : dosyalar) {
-                    if (dosya.isDirectory()) {
-                        klasorSil(dosya.getAbsolutePath());
-                    } else {
-                        dosya.delete();                        
-                        System.out.println(dosya.getName());
-                    }
-                }
-            }
-            klasor.delete();
-            //System.out.println("Klasör silindi: " + klasor.getAbsolutePath());
-        } else {
-            System.out.println("Belirtilen yol bir klasör değil: " + klasorYolu);
-        }
-    }
-
 	
 	public List<String> findJavaFiles(File directory)
 	{
@@ -165,6 +140,3 @@ public class FileManager
         return result;
     }
 }
-	
-
-

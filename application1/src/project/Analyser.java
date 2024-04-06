@@ -11,90 +11,112 @@ import java.nio.charset.StandardCharsets;
 
 public class Analyser 
 {
-	//public boolean isClassFile(String file) throws IOException
-	//{
-	//	return false;
-
-	//}
-	
-	public int findLOC(String file) {
+	public int findLOC(String file) 
+	{
 	    int LOC = 0;
 	    BufferedReader reader = null;
 	    
-	    try {
+	    try 
+	    {
 	        reader = new BufferedReader(new FileReader(file));
-	        while (reader.readLine() != null) {
+	        while (reader.readLine() != null) 
+	        {
 	            LOC++;
 	        }
-	    } catch (IOException e) {
+	    }
+	    catch (IOException e) 
+	    {
 	        e.printStackTrace();
-	    } finally {
-	        if (reader != null) {
-	            try {
+	    } 
+	    finally 
+	    {
+	        if (reader != null) 
+	        {
+	            try 
+	            {
 	                reader.close();
-	            } catch (IOException e) {
+	            } 
+	            catch (IOException e)
+	            {
 	                e.printStackTrace();
 	            }
 	        }
 	    }
-
 	    return LOC;
 	}
 	
-	public int findPureCodeLine(String file) {
+	public int findPureCodeLine(String file)
+	{
 	    int pureCodeLine = 0;
 	    boolean isCommentBlock = false;
 	    BufferedReader reader = null;
 
-	    try {
+	    try 
+	    {
 	        reader = new BufferedReader(new FileReader(file));
 	        String line;
 
-	        while ((line = reader.readLine()) != null) {
+	        while ((line = reader.readLine()) != null)
+	        {
 	            line = line.trim();
 
-	            if (line.contains("*/") && line.contains("/*") && !line.endsWith(";")) {
+	            if (line.contains("*/") && line.contains("/*") && !line.endsWith(";")) 
+	            {
 	                isCommentBlock = false;
 	                continue;
 	            }
-	            if (line.isEmpty() || line.startsWith("//")) {
+	            if (line.isEmpty() || line.startsWith("//")) 
+	            {
 	                continue;
 	            }
-	            if (line.startsWith("/*")) {
+	            if (line.startsWith("/*"))
+	            {
 	                isCommentBlock = true;
 	                continue;
 	            }
-	            if (line.startsWith("/**")) {
+	            if (line.startsWith("/**"))
+	            {
 	                isCommentBlock = true;
-	                if (!line.endsWith("*/")) {
+	                if (!line.endsWith("*/")) 
+	                {
 	                    continue;
 	                }
 	            }
-	            if (line.endsWith("*/")) {
+	            if (line.endsWith("*/")) 
+	            {
 	                isCommentBlock = false;
 	                continue;
 	            }
 
-	            if (!isCommentBlock) {
+	            if (!isCommentBlock) 
+	            {
 	                pureCodeLine++;
 	            }
 	        }
-	    } catch (IOException e) {
+	    } 
+	    catch (IOException e)
+	    {
 	        e.printStackTrace();
-	    } finally {
-	        if (reader != null) {
-	            try {
+	    } 
+	    finally 
+	    {
+	        if (reader != null) 
+	        {
+	            try 
+	            {
 	                reader.close();
-	            } catch (IOException e) {
+	            }
+	            catch (IOException e) 
+	            {
 	                e.printStackTrace();
 	            }
 	        }
 	    }
-
 	    return pureCodeLine;
 	}
 
-	public int findFunctions(String file) {
+	public int findFunctions(String file) 
+	{
 	    int functions = 0;
 	    BufferedReader reader = null;
 
@@ -102,31 +124,42 @@ public class Analyser
 	        reader = new BufferedReader(new FileReader(file));
 	        String line;
 
-	        while ((line = reader.readLine()) != null) {
+	        while ((line = reader.readLine()) != null) 
+	        {
 	            line = line.trim();
 
-	            if (line.startsWith("public") || line.startsWith("private") || line.startsWith("protected") || line.startsWith("static")) {
-	                if (line.contains("(") && line.contains(")") && !line.contains("new")) {
+	            if (line.startsWith("public") || line.startsWith("private") || line.startsWith("protected") || line.startsWith("static")) 
+	            {
+	                if (line.contains("(") && line.contains(")") && !line.contains("new")) 
+	                {
 	                    functions++;
 	                }
 	            }
 	        }
-	    } catch (IOException e) {
+	    } 
+	    catch (IOException e) 
+	    {
 	        e.printStackTrace();
-	    } finally {
-	        if (reader != null) {
-	            try {
+	    }
+	    finally
+	    {
+	        if (reader != null) 
+	        {
+	            try 
+	            {
 	                reader.close();
-	            } catch (IOException e) {
+	            } 
+	            catch (IOException e)
+	            {
 	                e.printStackTrace();
 	            }
 	        }
 	    }
-
 	    return functions;
 	}
 
-	public int findJavadoc(String file) {
+	public int findJavadoc(String file) 
+	{
 	    int javadoc = 0;
 	    BufferedReader reader = null;
 
@@ -135,93 +168,106 @@ public class Analyser
 	        String line;
 	        boolean inJavadoc = false;
 
-	        while ((line = reader.readLine()) != null) {
+	        while ((line = reader.readLine()) != null) 
+	        {
 	            line = line.trim();
-	            if (line.startsWith("/**")) {
+	            if (line.startsWith("/**")) 
+	            {
 	                inJavadoc = true;
-	            } else if (line.startsWith("*/")) {
+	            }
+	            else if (line.startsWith("*/")) 
+	            {
 	                inJavadoc = false;
-	            } else if (inJavadoc) {
+	            } 
+	            else if (inJavadoc) 
+	            {
 	                javadoc++;
-	                //System.out.print("\n"+line);
-	                /*if (isRealComment(line))
-	                {
-	                    javadoc++;
-	                    //System.out.print("\n"+line);
-	                }*/
 	            }
 	        }
-	    } catch (IOException e) {
+	    } 
+	    catch (IOException e)
+	    {
 	        e.printStackTrace();
-	    } finally {
-	        if (reader != null) {
+	    } 
+	    finally 
+	    {
+	        if (reader != null) 
+	        {
 	            try {
 	                reader.close();
-	            } catch (IOException e) {
+	            } 
+	            catch (IOException e) 
+	            {
 	                e.printStackTrace();
 	            }
 	        }
 	    }
-
 	    return javadoc;
 	}
 
-	public int findComment(String file) {
+	public int findComment(String file)
+	{
 	    int comment = 0;
 	    Pattern pattern = Pattern.compile("^\\s*//.*");
 	    BufferedReader reader = null;
-
-	    try {
+	    try
+	    {
 	        reader = new BufferedReader(new FileReader(file));
 	        String line;
 	        boolean isCommentBlock = false;
-
-	        while ((line = reader.readLine()) != null) {
+	        while ((line = reader.readLine()) != null)
+	        {
 	            line = line.trim();
 	            //System.out.print("\n"+line);
 	            Matcher matcher = pattern.matcher(line);
 
-	            if (line.isEmpty()) {
+	            if (line.isEmpty()) 
+	            {
 	                continue;
 	            }
 
-	            if (line.contains("//")) {
+	            if (line.contains("//"))
+	            {
 	                comment++;
-	                //System.out.println(line);
-
 	                continue;
 	            }
 
-	            if (line.startsWith("/*") && line.length() == 2) {
-	                //System.out.println(line);
-	                //System.out.println(line.charAt(1));
+	            if (line.startsWith("/*") && line.length() == 2) 
+	            {
 	                isCommentBlock = true;
 	                continue;
 	            }
 
-	            if (line.endsWith("*/")) {
+	            if (line.endsWith("*/"))
+	            {
 	                isCommentBlock = false;
 
 	                continue;
 	            }
 
-	            if (isCommentBlock) {
+	            if (isCommentBlock) 
+	            {
 	                comment++;
-	                //System.out.print("\n"+line);
 	            }
 	        }
-	    } catch (IOException e) {
+	    } 
+	    catch (IOException e) 
+	    {
 	        e.printStackTrace();
-	    } finally {
-	        if (reader != null) {
-	            try {
+	    }
+	    finally 
+	    {
+	        if (reader != null) 
+	        {
+	            try 
+	            {
 	                reader.close();
-	            } catch (IOException e) {
+	            } catch (IOException e) 
+	            {
 	                e.printStackTrace();
 	            }
 	        }
 	    }
-
 	    return comment;
 	}
 
@@ -248,11 +294,10 @@ public class Analyser
 	
 	public String getFileName(String file)
 	{
-        String[] parts = file.split("/");
-        String fileName = parts[parts.length - 1];
-        
-        return fileName;
+		File File = new File(file);
+        return File.getName();
     }
+	
 	private static boolean isRealComment(String line)
 	{
 		line = line.trim();

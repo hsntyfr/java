@@ -1,27 +1,16 @@
 package project;
-import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
-
-import project.FileManager;
-import java.util.ArrayList;
 import java.util.List;
-
 public class main 
 {
-
 	public static void main(String[] args) throws IOException 
 	{
 		FileManager fileManager = new FileManager();
 		Analyser analyser = new Analyser();
 		File Repo = fileManager.downloadFile();
         List<String> javaFiles = fileManager.findJavaFiles(Repo);
-        System.out.print("-----------------------");
-        //for (String filePath : javaFiles)
-        //{
-        //    System.out.println(filePath);
-        //}
-        System.out.println("-----------------------");
+        System.out.print("-----------------------\n");
         for (String filePath : javaFiles) 
         {
         	System.out.println("Sınıf: " + analyser.getFileName(filePath));
@@ -38,14 +27,7 @@ public class main
         	System.out.println("Fonksiyon Sayısı: " + functions);
         	System.out.println("Yorum Sapma Yüzdesi: %" + deviation);
         	System.out.println("----------------------------");
-        	//File klasor = new File(filePath);
-        	//System.out.print(klasor.delete());
-        	
-        	
         }
 		fileManager.deleteFile(Repo);
-		//fileManager.klasorSil(System.getProperty("user.dir") + "/file");
-		//fileManager.klasorSil(System.getProperty("user.dir") + "/file");
-        
 	}
 }
