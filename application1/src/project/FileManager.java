@@ -25,7 +25,7 @@ public class FileManager
         	partsUrl[partsUrl.length - 2] = "";
         }
         url = String.join("/", partsUrl);
-        System.out.println(url);
+        //System.out.println(url);
 		return url;
 	}
 
@@ -70,7 +70,8 @@ public class FileManager
                     {
                         deleteFile(filesa);
                     } else {
-                        filesa.delete();
+                    	System.out.print(filesa.getName());
+                        System.out.print(filesa.delete() + "\n");
                     }
                 }
             }
@@ -84,6 +85,27 @@ public class FileManager
 
         }
 	}
+	public static void klasorSil(String klasorYolu) {
+        File klasor = new File(klasorYolu);
+        if (klasor.isDirectory()) {
+            File[] dosyalar = klasor.listFiles();
+            if (dosyalar != null) {
+                for (File dosya : dosyalar) {
+                    if (dosya.isDirectory()) {
+                        klasorSil(dosya.getAbsolutePath());
+                    } else {
+                        dosya.delete();                        
+                        System.out.println(dosya.getName());
+                    }
+                }
+            }
+            klasor.delete();
+            //System.out.println("Klasör silindi: " + klasor.getAbsolutePath());
+        } else {
+            System.out.println("Belirtilen yol bir klasör değil: " + klasorYolu);
+        }
+    }
+
 	
 	public List<String> findJavaFiles(File directory)
 	{
@@ -103,7 +125,7 @@ public class FileManager
                 {
                     findJavaFilesHelper(file, javaFilesList);
                 } 
-                else if (file.getName().endsWith(".java") && !file.getName().startsWith("I")) 
+                else if (file.getName().endsWith(".java")) 
                 {
                 	if(isJavaFile(file))
                     javaFilesList.add(file.getAbsolutePath());
@@ -112,27 +134,36 @@ public class FileManager
         }
     }
 	
-	private static boolean isJavaFile(File file)
-	{
-		Pattern pattern = Pattern.compile("(?<=\\bclass\\s)\\w+");
-		try {
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
+	private static boolean isJavaFile(File file) {
+        Pattern pattern = Pattern.compile("(?<=\\bclass\\s)\\w+");
+        Scanner scanner = null;
+        boolean result = false;
+        try {
+            scanner = new Scanner(file);
+            while (scanner.hasNextLine()) 
+            {
                 String line = scanner.nextLine();
                 Matcher matcher = pattern.matcher(line);
-                if (matcher.find()) {
-                    return true;
+                if (matcher.find() && !line.contains("interface")) 
+                {
+                    result = true;
+                    break;
                 }
             }
-            scanner.close();
-        } 
-		catch (FileNotFoundException e) 
-		{
+        }
+        catch (FileNotFoundException e)
+        {
             e.printStackTrace();
         }
-		return false;	
-	}
-	
+        finally 
+        {
+            if (scanner != null)
+            {
+                scanner.close();
+            }
+        }
+        return result;
+    }
 }
 	
 
